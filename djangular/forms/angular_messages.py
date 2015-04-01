@@ -15,7 +15,7 @@ class NgMessagesFormErrorList(TupleErrorList):
 
 class NgMessagesFieldErrorList(TupleErrorList):
 	
-    ul_format_valid = '<ul class="{1}" ng-show="{0}.$dirty" ng-cloak>{2}</ul>'
+    ul_format_valid = '<ul class="{1}" ng-show="{2}.$submitted || {0}.$dirty" ng-cloak>{3}</ul>'
     li_format_valid = '<li ng-show="{0}.{1}" class="{2}">{3}</li>'
 
     ul_format = '<ul class="{1}" ng-messages="{0}.$error" ng-show="{2}.$submitted || {0}.$dirty" ng-cloak>{3}</ul>'
@@ -49,7 +49,7 @@ class NgMessagesFieldErrorList(TupleErrorList):
                 err_tuple = (e[0], msg_type[0] if len(msg_type) == 1 else msg_type.pop(), e[4], force_text(e[5]))
                 error_list.append(format_html(li_format, *err_tuple))
 
-            return mark_safe(format_html(self.ul_format_valid, first[0], first[1], mark_safe(''.join(valid_list)))) \
+            return mark_safe(format_html(self.ul_format_valid, first[0], first[1], self._get_form_name(first[0]), mark_safe(''.join(valid_list)))) \
                  + mark_safe(format_html(self.ul_format, first[0], first[1], self._get_form_name(first[0]), mark_safe(''.join(invalid_list))))
 
         return format_html('<ul class="errorlist">{0}</ul>',
@@ -92,4 +92,7 @@ class NgMessagesMixin(NgFormBaseMixin):
     def _apply_bound_error(self, bound_field, attrs):
         for error in bound_field.errors:
             if error[3] == '$pristine':
-                attrs.update({'djng-msgs-error': error[5]})
+                if self.add_djng_error:
+                    attrs.update({'djng-error': 'bound-msg-field'})
+                else:
+                    attrs.update({'djng-msgs-error': error[5]})

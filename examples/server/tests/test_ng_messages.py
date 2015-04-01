@@ -51,7 +51,7 @@ class NgMessagesMixinTest(TestCase):
         self.assertEqual(len(ul), 2)
         attrib = dict(ul[0].attrib.items())
         self.assertEqual(attrib.get('class'), 'djng-field-errors')
-        self.assertEqual(attrib.get('ng-show'), 'messages_form.email.$dirty')
+        self.assertEqual(attrib.get('ng-show'), 'messages_form.$submitted || messages_form.email.$dirty')
         self.assertIsNone(attrib.get('ng-messages'))
 
 
@@ -100,7 +100,7 @@ class NgMessagesMixinWithValidationTest(TestCase):
         self.assertEqual(len(ul), 2)
         attrib = dict(ul[0].attrib.items())
         self.assertEqual(attrib.get('class'), 'djng-field-errors')
-        self.assertEqual(attrib.get('ng-show'), 'messages_form.email.$dirty')
+        self.assertEqual(attrib.get('ng-show'), 'messages_form.$submitted || messages_form.email.$dirty')
         self.assertIsNone(attrib.get('ng-messages'))
 
     def test_form_valid_li_present(self):

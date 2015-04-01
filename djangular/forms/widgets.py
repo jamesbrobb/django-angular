@@ -41,6 +41,8 @@ class CheckboxFieldRendererMixin(object):
         if attrs.pop('multiple_checkbox_required', False):
             field_names = [format_html('{0}.{1}', name, choice) for choice, dummy in choices]
             self.field_attrs.append(format_html('validate-multiple-fields="{0}"', json.dumps(field_names)))
+        #if attrs.pop('djng-msgs-error', None):
+            #print name
         super(CheckboxFieldRendererMixin, self).__init__(name, value, attrs, choices)
 
 
@@ -82,7 +84,9 @@ class RadioFieldRendererMixin(object):
     def __init__(self, name, value, attrs, choices):
         attrs.pop('djng-error', None)
         self.field_attrs = []
+        #self.field_attrs = [format_html('ng-form="{0}"', name)]
         if attrs.pop('radio_select_required', False):
+            #attrs.update({'ng-required': ''})
             self.field_attrs.append(format_html('validate-multiple-fields="{0}"', name))
         super(RadioFieldRendererMixin, self).__init__(name, value, attrs, choices)
 
